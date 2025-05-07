@@ -18,7 +18,7 @@ namespace TaskFlow.Domain.Entities
             Title = title;
             Description = description;
             Status = status;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
     }
 
@@ -39,7 +39,7 @@ namespace TaskFlow.Domain.Entities
             Title = title;
             Description = description;
             Status = status;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
     }
 
@@ -47,7 +47,7 @@ namespace TaskFlow.Domain.Entities
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public Users User { get; set; } = null!;
+        public User User { get; set; } = null!;
         public long MainTaskId { get; set; }
         public MainTask MainTask { get; set; } = null!;
         public string Text { get; set; } = null!;
@@ -58,7 +58,7 @@ namespace TaskFlow.Domain.Entities
             UserId = userId;
             MainTaskId = mainTaskId;
             Text = text;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
     }
 
@@ -68,7 +68,7 @@ namespace TaskFlow.Domain.Entities
         public long UserId { get; set; }
         public long MainTaskId { get; set; }
 
-        public Users User { get; set; } = null!;
+        public User User { get; set; } = null!;
         public MainTask MainTask { get; set; } = null!;
 
         public TaskAssignee(long userId, long mainTaskId)

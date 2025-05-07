@@ -1,0 +1,51 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json 
+
+# Rider / JetBrains IDEs
+.idea/
+
+# Logs
+*.log
+
+# dotenv
+.env
+.env.*
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Publish outputs
+publish/
+wwwroot/dist/
+wwwroot/node_modules/
+
+# Others
+*.db  # Se tiver algum banco SQLite local
+*.pfx # Certificados
+
+# Optional: Ignore migrations snapshots
+Migrations/*.cs
+
+# Data-Bases
+.db
+picpay-simplificado/Infra/Migrations/20250429173725_InitalMigration.cs
+picpay-simplificado/Infra/Migrations/20250429173725_InitalMigration.Designer.cs
+picpay-simplificado/Infra/Migrations/AppDbContextModelSnapshot.cs
+picpay-simplificado/Api/app.db
+picpay-simplificado/Api/app.db-shm
+picpay-simplificado/Api/app.db-wal

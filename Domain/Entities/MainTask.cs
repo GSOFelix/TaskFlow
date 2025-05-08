@@ -9,15 +9,18 @@ namespace TaskFlow.Domain.Entities
         public string Description { get; set; } = null!;
         public ETaskStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public long UserId { get; set; }
+        public User User { get; set; } = null!;
         public List<TaskAssignee> TaskAssignees { get; set; } = [];
         public List<Subtask> Subtasks { get; set; } = [];
         public List<Comment> Comments { get; set; } = [];
 
-        public MainTask(string title, string description, ETaskStatus status)
+        public MainTask(string title, string description, ETaskStatus status, long userId)
         {
             Title = title;
             Description = description;
             Status = status;
+            UserId = userId;
             CreatedAt = DateTime.UtcNow;
         }
     }

@@ -8,6 +8,8 @@
         public string PasswordHash { get; private set; } = null!;
         public DateTime CreatAt { get; private set; }
         public List<TaskAssignee> TaskAssignees { get; set; } = [];
+        public List<Comment> Comments { get; set; } = [];
+        public List<MainTask> MainTasks { get; set; } = [];
 
         public User(string name, string email, string passWordHash)
         {

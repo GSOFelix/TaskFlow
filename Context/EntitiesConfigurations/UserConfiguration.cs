@@ -14,6 +14,8 @@ namespace TaskFlow.Context.EntitiesConfigurations
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.PasswordHash).IsRequired();
             builder.Property(x => x.CreatAt).IsRequired().HasColumnType("TIMESTAMP WITH TIME ZONE");
+
+            builder.HasIndex(x => x.Email).IsUnique();
         }
     }
 }

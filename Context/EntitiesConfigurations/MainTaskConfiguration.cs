@@ -14,6 +14,8 @@ namespace TaskFlow.Context.EntitiesConfigurations
             builder.Property(x => x.Description).IsRequired().HasMaxLength(500);
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired().HasColumnType("TIMESTAMP WITH TIME ZONE");
+
+            builder.HasOne(u => u.User).WithMany(x => x.MainTasks).HasForeignKey(u => u.UserId);
         }
     }
 }

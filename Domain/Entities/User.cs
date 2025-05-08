@@ -1,4 +1,6 @@
-﻿namespace TaskFlow.Domain.Entities
+﻿using TaskFlow.Domain.Exceptions;
+
+namespace TaskFlow.Domain.Entities
 {
     public class User
     {
@@ -13,10 +15,18 @@
 
         public User(string name, string email, string passWordHash)
         {
-            Name = name;
+            DomainValidation(name, passWordHash); 
             Email = email;
-            PasswordHash = passWordHash;
             CreatAt = DateTime.UtcNow;
+        }
+
+        private void DomainValidation(string name, string passWordHash)
+        {
+            DomainRule.When(string.IsNullOrWhiteSpace(name), "O nome é obrigatorio");
+            DomainRule.When(name.Length < 3 , "O nome deve ter no mínimo 3 caracteres");
+            Name = name;
+            DomainRule.When(string.IsNullOrWhiteSpace(passWordHash), "A senha é obrigatoria");
+            PasswordHash = passWordHash;
         }
 
 

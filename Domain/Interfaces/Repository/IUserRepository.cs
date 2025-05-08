@@ -10,7 +10,7 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// <param name="id"> Id do usuário</param>
         /// <param name="token">Token de cancelamento</param>
         /// <returns>O usuário se existir</returns>
-        Task<User> GetByIdAsync(int id,CancellationToken token);
+        Task<User?> GetByIdAsync(int id,CancellationToken token);
 
         /// <summary>
         /// Insere um novo usuário no banco de dados

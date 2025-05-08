@@ -18,7 +18,7 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// <param name="mainTaskId">ID da tarefa principal.</param>
         /// <param name="token">Token de cancelamento</param>
         /// <returns>A tarefa correspondente, se existir.</returns>
-        Task<MainTask> GetByIdAsync(long mainTaskId, CancellationToken token);
+        Task<MainTask?> GetByIdAsync(long mainTaskId, CancellationToken token);
 
         /// <summary>
         /// Insere uma nova tarefa no banco de dados.

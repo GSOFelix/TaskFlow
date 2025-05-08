@@ -18,7 +18,7 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// <param name="subTaskId">ID da subTarefa principal.</param>
         /// <param name="token">Token de cancelamento</param>
         /// <returns>A subTarefa correspondente, se existir.</returns>
-        Task<Subtask> GetByIdAsync(long subTaskId, CancellationToken token);
+        Task<Subtask?> GetByIdAsync(long subTaskId, CancellationToken token);
 
         /// <summary>
         /// Insere uma nova subTarefa no banco de dados.

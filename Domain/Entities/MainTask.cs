@@ -16,6 +16,8 @@ namespace TaskFlow.Domain.Entities
         public List<Subtask> Subtasks { get; set; } = [];
         public List<Comment> Comments { get; set; } = [];
 
+        private MainTask() { }
+
         public MainTask(string title, string description, long userId)
         {
             DomainRule.When(string.IsNullOrWhiteSpace(title), "O Titulo é obrigatorio");
@@ -40,6 +42,8 @@ namespace TaskFlow.Domain.Entities
         public ETaskStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        private Subtask() { }
+
         public Subtask(long mainTaskId, string title, string description)
         {
             DomainRule.When(mainTaskId <= 0, "Id da Tarefa inválido");
@@ -62,6 +66,8 @@ namespace TaskFlow.Domain.Entities
         public MainTask MainTask { get; set; } = null!;
         public string Text { get; private set; } = null!;
         public DateTime CreatedAt { get; private set; }
+
+        private Comment() { }
 
         public Comment(long userId, long mainTaskId, string text)
         {
@@ -88,6 +94,8 @@ namespace TaskFlow.Domain.Entities
 
         public User User { get; set; } = null!;
         public MainTask MainTask { get; set; } = null!;
+
+        private TaskAssignee() { }
 
         public TaskAssignee(long userId, long mainTaskId)
         {

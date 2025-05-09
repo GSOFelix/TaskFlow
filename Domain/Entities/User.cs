@@ -13,6 +13,8 @@ namespace TaskFlow.Domain.Entities
         public List<Comment> Comments { get; set; } = [];
         public List<MainTask> MainTasks { get; set; } = [];
 
+        private User() { }
+
         public User(string name, string email, string passWordHash)
         {
             DomainValidation(name, passWordHash); 

@@ -1,14 +1,14 @@
+using TaskFlow.Extensions;
+using DotNetEnv;
+
 var builder = WebApplication.CreateBuilder(args);
-
-
-
+Env.Load();
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDependeceInjection(builder.Configuration);
 
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {

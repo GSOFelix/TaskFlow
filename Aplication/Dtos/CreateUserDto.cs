@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaskFlow.Dtos
+namespace TaskFlow.Aplication.Dtos
 {
     public record CreateUserDto(
         [property: Required]

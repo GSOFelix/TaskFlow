@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TaskFlow.Application.UseCases.Implementations;
+using TaskFlow.Application.UseCases.Interfaces;
 using TaskFlow.Configurations;
-using TaskFlow.Context;
 using TaskFlow.Domain.Interfaces.Repository;
 using TaskFlow.Domain.Interfaces.Services;
-using TaskFlow.Repositories;
-using TaskFlow.Services;
+using TaskFlow.Infra.Context;
+using TaskFlow.Infra.Repositories;
+using TaskFlow.Infra.Services;
 
 namespace TaskFlow.Extensions
 {
@@ -26,6 +28,9 @@ namespace TaskFlow.Extensions
 
             // injetar dependencia de serviços 
             services.AddScoped<IPassWordService, PassWordService>();
+
+            // Injetar dependencia de UserCase
+            services.AddScoped<IUserUseCase, UserUseCase>();
 
             return services;
         }

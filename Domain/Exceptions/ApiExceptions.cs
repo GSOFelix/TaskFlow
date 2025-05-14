@@ -3,6 +3,7 @@
     public class NotFoundException(string message) : Exception(message) { }
     public class BadRequestException(string message) : Exception(message) { }
     public class Unauthorizeexception(string message) : Exception(message) { }
+    public class ForbiddenException(string message) : Exception(message) { }
     public class InternalErrorException(string message, Exception? inner) : Exception(message, inner) { }
 
     public class DomainRule(string message) : Exception(message)

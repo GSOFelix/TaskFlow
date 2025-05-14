@@ -10,6 +10,8 @@ namespace TaskFlow.Infra.Context
         public DbSet<Subtask> Subtasks { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TaskAssignee> TaskAssignees { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<UserPermission> UserPermissions { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

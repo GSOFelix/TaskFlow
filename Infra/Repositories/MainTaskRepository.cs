@@ -14,13 +14,39 @@ namespace TaskFlow.Infra.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MainTask>> GetAllByUserAsync(long userId, CancellationToken token)
+        public async Task<IEnumerable<MainTask>> GetAllByUserAsync(long userId, bool detail, CancellationToken token)
         {
+            if (detail)
+            {
+                var query = _context.MainTasks
+                    .Include(c => c.Comments)
+                    .Include(a => a.TaskAssignees)
+                        .ThenInclude(u => u.User)
+                    .AsNoTracking()
+                    .OrderBy(x => x.Id)
+                    .Where(x => x.UserId == userId);
+
+                return await query.ToListAsync(token);
+            }
+
             return await _context.MainTasks.Where(u => u.UserId == userId).ToListAsync(token);
         }
 
-        public async Task<MainTask?> GetByIdAsync(long mainTaskId, CancellationToken token)
+        public async Task<MainTask?> GetByIdAsync(long mainTaskId, bool detail, CancellationToken token)
         {
+            if (detail)
+            {
+                var query = _context.MainTasks
+                    .Include(c => c.Comments)
+                    .Include(a => a.TaskAssignees)
+                    .ThenInclude(u => u.User)
+                    .AsNoTracking()
+                    .Where(x => x.Id == mainTaskId);
+
+                return await query.FirstOrDefaultAsync(token);
+
+            }
+
             return await _context.MainTasks.FirstOrDefaultAsync(m => m.Id == mainTaskId, token);
         }
 

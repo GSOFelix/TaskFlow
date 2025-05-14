@@ -1,4 +1,5 @@
-﻿using TaskFlow.Domain.Entities;
+﻿using TaskFlow.Application.Dtos.PermissionDto;
+using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Application.Dtos.UserDto
 {
@@ -6,7 +7,8 @@ namespace TaskFlow.Application.Dtos.UserDto
         long Id,
         string Name,
         string Email,
-        DateTime CreatAt
+        DateTime CreatAt,
+        IEnumerable<PermissionsDto> Permissions
     );
 
 

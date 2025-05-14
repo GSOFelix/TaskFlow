@@ -82,7 +82,8 @@ namespace TaskFlow.Domain.Entities
 
         public void UpdateText(string newText)
         {
-            Text = newText;
+            Text = newText.Trim();
+            CreatedAt = DateTime.UtcNow;
         }
     }
 

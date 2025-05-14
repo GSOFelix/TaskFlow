@@ -18,7 +18,7 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// <param name="commentId">ID do comentário.</param>
         /// <param name="token">Token de cancelamento.</param>
         /// <returns>Comentário correspondente ao ID informado.</returns>
-        Task<Comment?> GetById(long commentId, CancellationToken token);
+        Task<Comment?> GetByIdAsync(long commentId, CancellationToken token);
 
         /// <summary>
         /// Atualiza os dados de um comentário existente.

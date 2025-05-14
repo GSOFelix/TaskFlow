@@ -22,10 +22,15 @@ namespace TaskFlow.Infra.Repositories
 
         public async Task<IEnumerable<Comment>> GetAllbyTaskAsync(long mainTaskId, CancellationToken token)
         {
-            return await _context.Comments.Where(m => m.MainTaskId == mainTaskId).ToListAsync(token);
+            var query = _context.Comments
+                 .AsNoTracking()
+                 .OrderByDescending(c => c.CreatedAt)
+                 .Where(c => c.MainTaskId == mainTaskId);
+
+            return await query.ToListAsync(token);
         }
 
-        public async Task<Comment?> GetById(long commentId, CancellationToken token)
+        public async Task<Comment?> GetByIdAsync(long commentId, CancellationToken token)
         {
             return await _context.Comments.FirstOrDefaultAsync(x => x.Id == commentId, token);
         }

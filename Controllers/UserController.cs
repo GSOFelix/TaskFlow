@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TaskFlow.Aplication.Dtos;
+using TaskFlow.Application.Dtos.UserDto;
 using TaskFlow.Application.UseCases.Interfaces;
 
 namespace TaskFlow.Controllers
@@ -19,7 +19,7 @@ namespace TaskFlow.Controllers
         public async Task<ActionResult> Create([FromBody] UserRequestDto requestDto, CancellationToken token)
         {
             var newUser = await userUseCase.CreateUser(requestDto, token);
-            return CreatedAtAction(nameof(Select), new { id = newUser }, newUser);
+            return CreatedAtAction(nameof(Select), new { id = newUser }, "Usuário criado com sucesso");
         }
     }
 }

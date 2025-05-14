@@ -1,5 +1,4 @@
-﻿using TaskFlow.Aplication.Dtos;
-using TaskFlow.Application.Dtos;
+﻿using TaskFlow.Application.Dtos.UserDto;
 
 namespace TaskFlow.Application.UseCases.Interfaces
 {

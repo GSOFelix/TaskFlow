@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using TaskFlow.Aplication.Dtos;
-using TaskFlow.Application.Dtos;
+using TaskFlow.Application.Dtos.UserDto;
 using TaskFlow.Application.Mappers;
 using TaskFlow.Application.UseCases.Interfaces;
 using TaskFlow.Domain.Entities;

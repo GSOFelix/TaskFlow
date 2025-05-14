@@ -1,0 +1,87 @@
+﻿using TaskFlow.Application.Dtos;
+using TaskFlow.Application.Dtos.CommentsDto;
+using TaskFlow.Application.Mappers;
+using TaskFlow.Application.UseCases.Interfaces;
+using TaskFlow.Domain.Exceptions;
+using TaskFlow.Domain.Interfaces.Repository;
+
+namespace TaskFlow.Application.UseCases.Implementations
+{
+    public class CommentsUseCase : ICommentsUseCase
+    {
+        private readonly ICommentRepository _commentRepository;
+        private readonly IUserUseCase _userUseCase;
+        private readonly IMainTaskUseCase _mainTaskUseCase;
+
+        public CommentsUseCase(ICommentRepository commentRepository, IUserUseCase userUseCase, IMainTaskUseCase mainTaskUseCase)
+        {
+            _commentRepository = commentRepository;
+            _userUseCase = userUseCase;
+            _mainTaskUseCase = mainTaskUseCase;
+        }
+
+        public async Task DeleteComment(long commentId,long userId, CancellationToken token)
+        {
+            var comment = await _commentRepository.GetByIdAsync(commentId, token)
+                ?? throw new Exception("Comentário nao encontrado");
+
+            if (comment.UserId != userId)
+                throw new ForbiddenException("Você não tem permissão para deletar este comentário.");
+
+            await _commentRepository.DeleteAsync(comment,token);
+        }
+
+        public async Task<CommentsResponseDto> GetCommentById(long commentId, CancellationToken token)
+        {
+            var comment = await _commentRepository.GetByIdAsync(commentId, token)
+                ?? throw new Exception("Comentário nao encontrado");
+
+            return comment.ToDto();
+        }
+
+        public async Task<IEnumerable<CommentsResponseDto>> GetCommentsByMainTaskId(long mainTaskId, CancellationToken token)
+        {
+            var comments = await _commentRepository.GetAllbyTaskAsync(mainTaskId, token);
+
+            return comments.ToListDto() ?? throw new NotFoundException("Nemhum comentário encontrado");
+        }
+
+        public async Task<long> PostComment(CommentsRequestDto request, CancellationToken token)
+        {
+            // Verificar existencia da tarefa;
+            var task = await _mainTaskUseCase.GetMainTaskById(request.MainTaskId, true, token);
+
+            // Verificar se o usuario Existe;
+            await _userUseCase.GetUserById(request.UserId, token);
+
+            // Verificar se usuario que esta commentendo é o criador ou um designado a tarefa;
+            if (!(request.UserId == task.UserId
+                || task.TaskAssignees?.Any(assignee => assignee.UserId == request.UserId) == true))
+            {
+                throw new ForbiddenException("Usuário não autorizado a interagir com essa tarefa.");
+            }
+
+            // Registra Comentario;
+            return await _commentRepository.InsertAsync(request.ToEntity(), token);
+        }
+
+        public async Task<CommentsResponseDto> UpdateComment(UpdateCommentRequestDto request, CancellationToken token)
+        {
+            // Selecionar o comentário 
+            var comment = await _commentRepository.GetByIdAsync(request.Id, token)
+                 ?? throw new NotFoundException("Comentario não encontrado");
+
+            // Verifica se o usuário é o autor do comentário
+            if (comment.UserId != request.UserId)
+                throw new ForbiddenException("Você não tem permissão para editar este comentário.");
+
+            // Atualiza o texto
+            comment.UpdateText(request.Comment);
+
+            // Salva as alterações
+            await _commentRepository.UpdateAsync(comment, token);
+
+            return comment.ToDto();
+        }
+    }
+}

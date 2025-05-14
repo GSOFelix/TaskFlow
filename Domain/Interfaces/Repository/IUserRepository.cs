@@ -13,6 +13,14 @@ namespace TaskFlow.Domain.Interfaces.Repository
         Task<User?> GetByIdAsync(long id,CancellationToken token);
 
         /// <summary>
+        /// Retorna o usuário especifico pelo Email
+        /// </summary>
+        /// <param name="email"> Email do usuário</param>
+        /// <param name="token">Token de cancelamento</param>
+        /// <returns>O usuário se existir</returns>
+        Task<User?> GetByEmailAsync(string email, CancellationToken token);
+
+        /// <summary>
         /// Insere um novo usuário no banco de dados
         /// </summary>
         /// <param name="user">Objeto de usuário a ser inserido</param>

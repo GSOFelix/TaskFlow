@@ -12,6 +12,7 @@ namespace TaskFlow.Domain.Entities
         public List<TaskAssignee> TaskAssignees { get; set; } = [];
         public List<Comment> Comments { get; set; } = [];
         public List<MainTask> MainTasks { get; set; } = [];
+        public List<UserPermission> UserPermissions { get; set; } = [];
 
         private User() { }
 

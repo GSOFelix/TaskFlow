@@ -1,4 +1,4 @@
-﻿using TaskFlow.Application.Dtos;
+﻿using TaskFlow.Application.Dtos.UserDto;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Application.Mappers

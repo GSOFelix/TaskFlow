@@ -31,6 +31,9 @@ namespace TaskFlow.Extensions
 
             // Injetar dependencia de UserCase
             services.AddScoped<IUserUseCase, UserUseCase>();
+            services.AddScoped<IMainTaskUseCase, MainTaskUseCase>();
+            services.AddScoped<ITaskAssigneeUseCase,TaskAssigneeUseCase>();
+            services.AddScoped<ICommentsUseCase, CommentsUseCase>();    
 
             return services;
         }

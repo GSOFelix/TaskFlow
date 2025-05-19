@@ -30,10 +30,11 @@ namespace TaskFlow.Extensions
             services.AddScoped<ISubTaskRepository, SubTaskRepository>();
             services.AddScoped<ITaskAssigneeRepository, TaskAssigneeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            
             // injetar dependencia de serviços 
             services.AddScoped<IPassWordService, PassWordService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddHttpContextAccessor();
 
             // Injetar dependencia de UserCase
             services.AddScoped<IUserUseCase, UserUseCase>();

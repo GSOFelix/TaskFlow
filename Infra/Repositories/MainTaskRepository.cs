@@ -56,5 +56,11 @@ namespace TaskFlow.Infra.Repositories
             await _context.SaveChangesAsync(token);
             return mainTask.Id;
         }
+
+        public async Task UpdateAsync(MainTask mainTask, CancellationToken token)
+        {
+            _context.MainTasks.Update(mainTask);
+            await _context.SaveChangesAsync(token);
+        }
     }
 }

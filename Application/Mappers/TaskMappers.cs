@@ -15,13 +15,12 @@ namespace TaskFlow.Application.Mappers
              mainTask.Description,
              mainTask.Status,
              mainTask.CreatedAt.ToLocalTime(),
-             mainTask.UserId, null, null)).ToList();
-
+             mainTask.UserId, [], [])).ToList();
         }
 
-        public static MainTask ToEntity(this MainTaskRequestDto requestDto)
+        public static MainTask ToEntity(this MainTaskRequestDto requestDto, long userId)
         {
-            return new MainTask(requestDto.Title, requestDto.Description, requestDto.UserId);
+            return new MainTask(requestDto.Title, requestDto.Description, userId);
         }
 
         public static MainTaskResponseDto ToDetailDto(this MainTask mainTask)
@@ -31,20 +30,20 @@ namespace TaskFlow.Application.Mappers
                 Title: mainTask.Title,
                 Description: mainTask.Description,
                 Status: mainTask.Status,
-                CreateAt: mainTask.CreatedAt,
+                CreateAt: mainTask.CreatedAt.ToLocalTime(),
                 UserId: mainTask.UserId,
-                TaskAssignees: mainTask.TaskAssignees?.Select(a => new TaskAssigneeResponseDto
+                TaskAssignees: mainTask.TaskAssignees.Select(a => new TaskAssigneeResponseDto
                 {
                     Id = a.Id,
                     UserId = a.UserId,
                     Name = a.User.Name
                 }),
-                Comments: mainTask.Comments?.Select(c => new CommentsResponseDto
+                Comments: mainTask.Comments.Select(c => new CommentsResponseDto
                 {
                     Id = c.Id,
                     UserId = c.UserId,
                     Text = c.Text,
-                    CreatedAt = c.CreatedAt,
+                    CreatedAt = c.CreatedAt.ToLocalTime(),
                 })
             );
         }
@@ -58,8 +57,8 @@ namespace TaskFlow.Application.Mappers
                 Status: mainTask.Status,
                 CreateAt: mainTask.CreatedAt,
                 UserId: mainTask.UserId,
-                TaskAssignees:null,
-                Comments:null
+                TaskAssignees:[],
+                Comments:[]
             );
         }
 
@@ -73,7 +72,7 @@ namespace TaskFlow.Application.Mappers
              mainTask.Status,
              mainTask.CreatedAt.ToLocalTime(),
              mainTask.UserId,
-             mainTask.TaskAssignees?.Select(x => new TaskAssigneeResponseDto
+             mainTask.TaskAssignees.Select(x => new TaskAssigneeResponseDto
              {
                  Id = x.Id,
                  UserId = x.UserId,
@@ -84,7 +83,7 @@ namespace TaskFlow.Application.Mappers
                  Id = c.Id,
                  UserId = c.UserId,
                  Text = c.Text,
-                 CreatedAt = c.CreatedAt,
+                 CreatedAt = c.CreatedAt.ToLocalTime(),
              })
              )).ToList();
 

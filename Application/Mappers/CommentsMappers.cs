@@ -6,9 +6,9 @@ namespace TaskFlow.Application.Mappers
 {
     public static class CommentsMappers
     {
-        public static Comment ToEntity(this CommentsRequestDto dto)
+        public static Comment ToEntity(this CommentsRequestDto dto,long userId)
         {
-            return new Comment(dto.UserId, dto.MainTaskId, dto.Comment);
+            return new Comment(userId, dto.MainTaskId, dto.Comment);
         }
 
         public static IEnumerable<CommentsResponseDto> ToListDto(this IEnumerable<Comment> comments)

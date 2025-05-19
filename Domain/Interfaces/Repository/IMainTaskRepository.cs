@@ -29,5 +29,13 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// <param name="token">Token de cancelamento</param>
         /// <returns>ID da nova tarefa inserida.</returns>
         Task<long> InsertAsync(MainTask mainTask, CancellationToken token);
+
+        /// <summary>
+        /// Atualiza uma tarefa no banco de dados.
+        /// </summary>
+        /// <param name="mainTask">Objeto da tarefa a ser atualizado.</param>
+        /// <param name="token">Token de cancelamento</param>
+        Task UpdateAsync(MainTask mainTask, CancellationToken token);
+
     }
 }

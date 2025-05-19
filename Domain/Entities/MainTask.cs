@@ -8,7 +8,7 @@ namespace TaskFlow.Domain.Entities
         public long Id { get; set; }
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public ETaskStatus Status { get; set; }
+        public ETaskStatus Status { get; private set; }
         public DateTime CreatedAt { get; set; }
         public long UserId { get; set; }
         public User User { get; set; } = null!;
@@ -28,6 +28,17 @@ namespace TaskFlow.Domain.Entities
             DomainRule.When(userId <= 0, "Id de usuário invalida");
             UserId = userId;
             CreatedAt = DateTime.UtcNow;
+        }
+
+        public void ChangeStatus(ETaskStatus newStatus)
+        {
+           if(Status == ETaskStatus.Done)
+            throw new BadRequestException("A tarefa já está concluída e não pode ser alterada.");
+
+            if (Status == newStatus)
+                return;
+
+            Status = newStatus;
         }
     }
 

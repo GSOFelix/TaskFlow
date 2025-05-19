@@ -1,4 +1,6 @@
-﻿namespace TaskFlow.Domain.Entities
+﻿using TaskFlow.Domain.Exceptions;
+
+namespace TaskFlow.Domain.Entities
 {
     public class UserPermission
     {
@@ -11,10 +13,15 @@
         public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
 
         private UserPermission() { }
+
         public UserPermission(int userId, int permissionId)
         {
+            DomainRule.When(userId <= 0, "O UserId é inválido");
             UserId = userId;
+
+            DomainRule.When(permissionId <= 0, "O PermissionId é inválido");
             PermissionId = permissionId;
+
             AssignedAt = DateTime.UtcNow;
         }
     }

@@ -3,7 +3,8 @@
     public enum ETaskStatus
     {
         ToDo = 1,
-        Doing = 2,
-        Done = 3
+        InProgress = 2,
+        ReadyForReview = 3,
+        Done = 4
     }
 }

@@ -10,8 +10,8 @@ namespace TaskFlow.Application.Dtos.MainTaskDto
         ETaskStatus Status,
         DateTime CreateAt,
         long UserId,
-        IEnumerable<TaskAssigneeResponseDto>? TaskAssignees,
-        IEnumerable<CommentsResponseDto>? Comments
+        IEnumerable<TaskAssigneeResponseDto> TaskAssignees,
+        IEnumerable<CommentsResponseDto> Comments
         );
 }
 

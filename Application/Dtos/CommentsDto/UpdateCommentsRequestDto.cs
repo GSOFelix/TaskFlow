@@ -8,9 +8,6 @@ namespace TaskFlow.Application.Dtos.CommentsDto
         public long Id { get; set; }
 
         [Required]
-        public long UserId { get; set; }
-
-        [Required]
         [MaxLength(255, ErrorMessage = "Tamanho maximo de 255 caracteres")]
         public string Comment { get; set; } = string.Empty;
     }

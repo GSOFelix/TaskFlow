@@ -9,9 +9,6 @@ namespace TaskFlow.Application.Dtos
 
         [Required(ErrorMessage = "A descrição é obrigatória")]
         [MaxLength(500, ErrorMessage = "Tamanho máximo de 500 caracteres")]
-        string Description,
-
-        [Required(ErrorMessage = "O usuário é obrigatório")]
-        long UserId
+        string Description
     );
 }

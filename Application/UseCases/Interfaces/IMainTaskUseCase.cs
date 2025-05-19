@@ -1,5 +1,6 @@
 ﻿using TaskFlow.Application.Dtos;
 using TaskFlow.Application.Dtos.MainTaskDto;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.Application.UseCases.Interfaces
 {
@@ -9,6 +10,10 @@ namespace TaskFlow.Application.UseCases.Interfaces
 
         Task<IEnumerable<MainTaskResponseDto>> GetAllMainTasks(long userId,bool detail, CancellationToken token);
 
-        Task<MainTaskResponseDto> GetMainTaskById(long id, bool detail,CancellationToken token);
+        Task<IEnumerable<MainTaskResponseDto>> GetAllMyTasks(bool detail, CancellationToken token);
+
+        Task<MainTaskResponseDto> GetMainTaskById(long mainTaskId, bool detail,CancellationToken token);
+
+        Task UpdateStatus(MainTaskUpdateStatusDto mainTaskDto,CancellationToken token);
     }
 }

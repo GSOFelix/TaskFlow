@@ -3,10 +3,7 @@
 namespace TaskFlow.Application.Dtos.CommentsDto
 {
     public record CommentsRequestDto
-    {
-        [Required]
-        public long UserId { get; set; }
-
+    {        
         [Required]
         public long MainTaskId { get; set; }
 

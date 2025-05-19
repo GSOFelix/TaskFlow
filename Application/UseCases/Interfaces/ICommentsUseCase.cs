@@ -13,6 +13,6 @@ namespace TaskFlow.Application.UseCases.Interfaces
 
         Task<CommentsResponseDto> UpdateComment(UpdateCommentRequestDto request, CancellationToken token);
 
-        Task DeleteComment(long commentId, long userId,CancellationToken token);
+        Task DeleteComment(long commentId,CancellationToken token);
     }
 }

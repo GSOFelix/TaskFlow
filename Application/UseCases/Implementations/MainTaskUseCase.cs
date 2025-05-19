@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using TaskFlow.Application.Dtos;
 using TaskFlow.Application.Dtos.MainTaskDto;
+using TaskFlow.Application.Helpers;
 using TaskFlow.Application.Mappers;
 using TaskFlow.Application.UseCases.Interfaces;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Exceptions;
 using TaskFlow.Domain.Interfaces.Repository;
+using TaskFlow.Domain.Enums;
+using TaskFlow.Application.Auth;
 
 namespace TaskFlow.Application.UseCases.Implementations
 {
@@ -13,23 +17,32 @@ namespace TaskFlow.Application.UseCases.Implementations
     {
         private readonly IMainTaskRepository _repository;
         private readonly IUserUseCase _userUseCase;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public MainTaskUseCase(IMainTaskRepository repository, IUserUseCase userUseCase)
+        public MainTaskUseCase(IMainTaskRepository repository, IUserUseCase userUseCase, IHttpContextAccessor httpContext)
         {
             _repository = repository;
             _userUseCase = userUseCase;
+            _contextAccessor = httpContext;
+
         }
 
         public async Task<long> CreateMainTask(MainTaskRequestDto request, CancellationToken token)
         {
-            // Verifica existencia 
-            await _userUseCase.GetUserById(request.UserId, token);
+            var user = _contextAccessor.HttpContext?.User;
+            var userId = UserContextHelper.EffectiveUserId(user);
 
-            return await _repository.InsertAsync(request.ToEntity(), token);
+            // Verifica existencia 
+            await _userUseCase.GetUserById(userId, token);
+
+            return await _repository.InsertAsync(request.ToEntity(userId), token);
         }
 
         public async Task<IEnumerable<MainTaskResponseDto>> GetAllMainTasks(long userId, bool detail, CancellationToken token)
         {
+            if (userId <= 0)
+                throw new BadRequestException("O código de usuario é inválido");
+
             // veifica exisencia
             await _userUseCase.GetUserById(userId, token);
 
@@ -43,16 +56,58 @@ namespace TaskFlow.Application.UseCases.Implementations
                 : tasks.ToListDto();
         }
 
-        public async Task<MainTaskResponseDto> GetMainTaskById(long id, bool detail, CancellationToken token)
+        public async Task<IEnumerable<MainTaskResponseDto>> GetAllMyTasks(bool detail, CancellationToken token)
         {
-            var task = await _repository.GetByIdAsync(id, detail, token);
+            var user = _contextAccessor.HttpContext?.User;
+            var userId = UserContextHelper.EffectiveUserId(user);
 
-            if (task is null)
-                throw new NotFoundException("Tarefa não encontrada");
-            
-            return detail 
+            await _userUseCase.GetUserById(userId, token);
+
+            var tasks = await _repository.GetAllByUserAsync(userId, detail, token)
+                ?? throw new NotFoundException("Nehuma tarefa encontrada");
+
+            return detail
+               ? tasks.ToListDetailDto()
+               : tasks.ToListDto();
+        }
+
+        public async Task<MainTaskResponseDto> GetMainTaskById(long mainTaskId, bool detail, CancellationToken token)
+        {
+            if (mainTaskId <= 0)
+                throw new BadRequestException("O Id da tarefa é inválido");
+
+            var user = _contextAccessor.HttpContext?.User;
+            var userId = UserContextHelper.EffectiveUserId(user);
+
+            var task = await _repository.GetByIdAsync(mainTaskId, detail, token)
+                ?? throw new NotFoundException("Tarefa não encontrada");
+
+            PermissionValidator.Validate(user, task, userId);
+
+            return detail
                 ? task.ToDetailDto()
-                : task.ToDto(); 
+                : task.ToDto();
+        }
+
+        public async Task UpdateStatus(MainTaskUpdateStatusDto mainTaskDto, CancellationToken token)
+        {
+            if (mainTaskDto.MainTaskId <= 0)
+                throw new BadRequestException("O Id da tarefa é invalido");
+
+            // Seleciona o usuario da requisição
+            var user = _contextAccessor.HttpContext?.User;
+            var userId = UserContextHelper.EffectiveUserId(user);
+
+            // verificar se a tarefa existe 
+            var task = await _repository.GetByIdAsync(mainTaskDto.MainTaskId, true, token) ??
+                throw new NotFoundException("Tarefa não encontrada");
+
+            PermissionValidator.ValidateStatusTask(user, task, userId, mainTaskDto.Status);
+            PermissionValidator.Validate(user, task, userId);
+
+            //Salva no banco de dados 
+            task.ChangeStatus(mainTaskDto.Status);
+            await _repository.UpdateAsync(task, token);
         }
     }
 }

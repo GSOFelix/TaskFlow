@@ -32,5 +32,16 @@ namespace TaskFlow.Application.Auth
                     throw new ForbiddenException("Apenas o criador da tarefa pode marcá-la como concluída.");
             }
         }
+
+        public static bool IsCreatorOrAdmin(ClaimsPrincipal? user, MainTask mainTask, long userId)
+        {
+            var isCreator = mainTask.UserId == userId;
+            var isAdmin = UserContextHelper.IsAdmin(user);
+
+            if (!(isCreator || isAdmin))
+                return false;
+
+            return true;
+        }
     }
 }

@@ -57,10 +57,11 @@ namespace TaskFlow.Infra.Repositories
             return mainTask.Id;
         }
 
-        public async Task UpdateAsync(MainTask mainTask, CancellationToken token)
+        public async Task<MainTask> UpdateAsync(MainTask mainTask, CancellationToken token)
         {
             _context.MainTasks.Update(mainTask);
             await _context.SaveChangesAsync(token);
+            return mainTask;
         }
     }
 }

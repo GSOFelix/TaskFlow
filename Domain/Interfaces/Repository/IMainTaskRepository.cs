@@ -35,7 +35,7 @@ namespace TaskFlow.Domain.Interfaces.Repository
         /// </summary>
         /// <param name="mainTask">Objeto da tarefa a ser atualizado.</param>
         /// <param name="token">Token de cancelamento</param>
-        Task UpdateAsync(MainTask mainTask, CancellationToken token);
+        Task<MainTask> UpdateAsync(MainTask mainTask, CancellationToken token);
 
     }
 }

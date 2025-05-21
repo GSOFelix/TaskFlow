@@ -15,5 +15,7 @@ namespace TaskFlow.Application.UseCases.Interfaces
         Task<MainTaskResponseDto> GetMainTaskById(long mainTaskId, bool detail,CancellationToken token);
 
         Task UpdateStatus(MainTaskUpdateStatusDto mainTaskDto,CancellationToken token);
+
+        Task<MainTaskResponseDto> UpdateMainTask(long mainTaskId,MainTaskUpdateRequestDto requestDto, CancellationToken token);
     }
 }

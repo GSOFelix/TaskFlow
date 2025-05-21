@@ -10,6 +10,7 @@ using TaskFlow.Domain.Exceptions;
 using TaskFlow.Domain.Interfaces.Repository;
 using TaskFlow.Domain.Enums;
 using TaskFlow.Application.Auth;
+using TaskFlow.Application.Validations;
 
 namespace TaskFlow.Application.UseCases.Implementations
 {
@@ -91,8 +92,7 @@ namespace TaskFlow.Application.UseCases.Implementations
 
         public async Task UpdateStatus(MainTaskUpdateStatusDto mainTaskDto, CancellationToken token)
         {
-            if (mainTaskDto.MainTaskId <= 0)
-                throw new BadRequestException("O Id da tarefa é invalido");
+            ValidateParameters.ValidateId(mainTaskDto.MainTaskId);
 
             // Seleciona o usuario da requisição
             var user = _contextAccessor.HttpContext?.User;
@@ -107,6 +107,39 @@ namespace TaskFlow.Application.UseCases.Implementations
 
             //Salva no banco de dados 
             task.ChangeStatus(mainTaskDto.Status);
+            await _repository.UpdateAsync(task, token);
+        }
+
+        public async Task<MainTaskResponseDto> UpdateMainTask(long mainTaskId, MainTaskUpdateRequestDto requestDto, CancellationToken token)
+        {
+            ValidateParameters.ValidateId(mainTaskId);
+
+            // Seleciona o usuario da requisição
+            var user = _contextAccessor.HttpContext?.User;
+            var userId = UserContextHelper.EffectiveUserId(user);
+
+            // verificar se a tarefa existe 
+            var task = await _repository.GetByIdAsync(mainTaskId, true, token) ??
+                throw new NotFoundException("Tarefa não encontrada");
+            
+            //verifica se ele é o criador admin ou vinculado
+            PermissionValidator.Validate(user, task, userId);
+
+           
+            if(PermissionValidator.IsCreatorOrAdmin(user,task, userId))
+            {
+                task.Title = requestDto.Title;
+                task.Description = requestDto.Description;
+                task.DeadLine = requestDto.Deadline;
+                task.Priority = requestDto.Priority; 
+            }
+
+            // valida se o status enviado é o Done.
+            PermissionValidator.ValidateStatusTask(user, task, userId, requestDto.Status);
+
+            task.ChangeStatus(requestDto.Status);
+            task.Progress = requestDto.Progress;
+
             await _repository.UpdateAsync(task, token);
         }
     }

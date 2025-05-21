@@ -9,7 +9,11 @@ namespace TaskFlow.Domain.Entities
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public ETaskStatus Status { get; private set; }
+        public EPriority Priority { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime DeadLine { get; set; }
+        public DateTime FinishedAt { get; private set; }
+        public int Progress { get; set; }
         public long UserId { get; set; }
         public User User { get; set; } = null!;
         public List<TaskAssignee> TaskAssignees { get; set; } = [];
@@ -18,27 +22,41 @@ namespace TaskFlow.Domain.Entities
 
         private MainTask() { }
 
-        public MainTask(string title, string description, long userId)
+        public MainTask(string title, string description, long userId, int progress, DateTime deadLine, EPriority priority)
         {
-            DomainRule.When(string.IsNullOrWhiteSpace(title), "O Titulo é obrigatorio");
+            DomainRule.When(string.IsNullOrWhiteSpace(title), "O Título é obrigatório.");
             Title = title;
-            DomainRule.When(string.IsNullOrWhiteSpace(description), "A Descrição é obrigatorio");
+
+            DomainRule.When(string.IsNullOrWhiteSpace(description), "A Descrição é obrigatória.");
             Description = description;
-            Status = ETaskStatus.ToDo;
-            DomainRule.When(userId <= 0, "Id de usuário invalida");
+
+            DomainRule.When(userId <= 0, "Id de usuário inválido.");
             UserId = userId;
+
+            DomainRule.When(progress < 0 || progress > 100, "O progresso deve estar entre 0 e 100.");
+            Progress = progress;
+
+            DomainRule.When(deadLine < DateTime.UtcNow, "A data de prazo não pode ser menor que a data atual.");
+            DeadLine = deadLine;
+
+            Priority = priority;
+            Status = ETaskStatus.ToDo;
             CreatedAt = DateTime.UtcNow;
+
         }
 
         public void ChangeStatus(ETaskStatus newStatus)
         {
-           if(Status == ETaskStatus.Done)
-            throw new BadRequestException("A tarefa já está concluída e não pode ser alterada.");
+            if (Status == ETaskStatus.Done)
+                throw new BadRequestException("A tarefa já está concluída e não pode ser alterada.");
 
             if (Status == newStatus)
                 return;
 
             Status = newStatus;
+
+            if (newStatus == ETaskStatus.Done)
+                FinishedAt = DateTime.Today;
         }
     }
 

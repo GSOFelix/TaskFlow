@@ -14,6 +14,10 @@ namespace TaskFlow.Infra.Context.EntitiesConfigurations
             builder.Property(x => x.Description).IsRequired().HasMaxLength(500);
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired().HasColumnType("TIMESTAMP WITH TIME ZONE");
+            builder.Property(x => x.Priority).IsRequired();
+            builder.Property(x => x.Progress).IsRequired();
+            builder.Property(x => x.DeadLine).IsRequired().HasColumnType("TIMESTAMP WITH TIME ZONE");
+            builder.Property(x => x.FinishedAt).HasColumnType("TIMESTAMP");
 
             builder.HasOne(u => u.User).WithMany(x => x.MainTasks).HasForeignKey(u => u.UserId);
         }

@@ -10,6 +10,10 @@ namespace TaskFlow.Application.Dtos.MainTaskDto
         ETaskStatus Status,
         DateTime CreateAt,
         long UserId,
+        int Progress,
+        EPriority Priority,
+        DateTime Deadline,
+        DateTime? FinishedAt,
         IEnumerable<TaskAssigneeResponseDto> TaskAssignees,
         IEnumerable<CommentsResponseDto> Comments
         );

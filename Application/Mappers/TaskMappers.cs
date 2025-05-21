@@ -15,12 +15,19 @@ namespace TaskFlow.Application.Mappers
              mainTask.Description,
              mainTask.Status,
              mainTask.CreatedAt.ToLocalTime(),
-             mainTask.UserId, [], [])).ToList();
+             mainTask.UserId,
+             mainTask.Progress,
+             mainTask.Priority,
+             mainTask.DeadLine.ToLocalTime(),
+             mainTask.FinishedAt.ToLocalTime(),
+             [],
+             [])).ToList();
         }
 
         public static MainTask ToEntity(this MainTaskRequestDto requestDto, long userId)
         {
-            return new MainTask(requestDto.Title, requestDto.Description, userId);
+            return new MainTask(requestDto.Title, requestDto.Description, userId,
+                requestDto.Progress, requestDto.Deadline, requestDto.Priority);
         }
 
         public static MainTaskResponseDto ToDetailDto(this MainTask mainTask)
@@ -32,6 +39,10 @@ namespace TaskFlow.Application.Mappers
                 Status: mainTask.Status,
                 CreateAt: mainTask.CreatedAt.ToLocalTime(),
                 UserId: mainTask.UserId,
+                Progress: mainTask.Progress,
+                Priority: mainTask.Priority,
+                Deadline: mainTask.DeadLine.ToLocalTime(),
+                FinishedAt: mainTask.FinishedAt.ToLocalTime(),
                 TaskAssignees: mainTask.TaskAssignees.Select(a => new TaskAssigneeResponseDto
                 {
                     Id = a.Id,
@@ -57,8 +68,12 @@ namespace TaskFlow.Application.Mappers
                 Status: mainTask.Status,
                 CreateAt: mainTask.CreatedAt,
                 UserId: mainTask.UserId,
-                TaskAssignees:[],
-                Comments:[]
+                Progress: mainTask.Progress,
+                Priority: mainTask.Priority,
+                Deadline: mainTask.DeadLine.ToLocalTime(),
+                FinishedAt: mainTask.FinishedAt.ToLocalTime(),
+                TaskAssignees: [],
+                Comments: []
             );
         }
 
@@ -72,6 +87,10 @@ namespace TaskFlow.Application.Mappers
              mainTask.Status,
              mainTask.CreatedAt.ToLocalTime(),
              mainTask.UserId,
+             mainTask.Progress,
+             mainTask.Priority,
+             mainTask.DeadLine.ToLocalTime(),
+             mainTask.FinishedAt.ToLocalTime(),
              mainTask.TaskAssignees.Select(x => new TaskAssigneeResponseDto
              {
                  Id = x.Id,
